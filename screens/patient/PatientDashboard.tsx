@@ -457,7 +457,15 @@ const SettingsView: React.FC<{ user: User }> = ({ user }) => {
                         <p className="text-sm text-medis-light-muted dark:text-medis-gray">Receive updates about your account and new records.</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" checked={emailNotifications} onChange={() => setEmailNotifications(!emailNotifications)} className="sr-only peer" />
+                        <label title="Toggle Email Notifications">
+                            <input
+                                type="checkbox"
+                                checked={emailNotifications}
+                                onChange={() => setEmailNotifications(!emailNotifications)}
+                                className="sr-only peer"
+                                title="Toggle Email Notifications"
+                            />
+                        </label>
                         <div className="w-11 h-6 bg-gray-200 dark:bg-medis-light-gray rounded-full peer peer-focus:ring-2 peer-focus:ring-medis-primary dark:peer-focus:ring-medis-primary-dark peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-medis-primary"></div>
                     </label>
                 </div>
@@ -466,8 +474,14 @@ const SettingsView: React.FC<{ user: User }> = ({ user }) => {
                         <p className="font-medium text-medis-light-text dark:text-medis-dark">SMS Notifications</p>
                         <p className="text-sm text-medis-light-muted dark:text-medis-gray">Get critical alerts and appointment reminders via text.</p>
                     </div>
-                     <label className="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" checked={smsNotifications} onChange={() => setSmsNotifications(!smsNotifications)} className="sr-only peer" />
+                     <label className="relative inline-flex items-center cursor-pointer" title="Toggle SMS Notifications">
+                        <input
+                            type="checkbox"
+                            checked={smsNotifications}
+                            onChange={() => setSmsNotifications(!smsNotifications)}
+                            className="sr-only peer"
+                            title="Toggle SMS Notifications"
+                        />
                         <div className="w-11 h-6 bg-gray-200 dark:bg-medis-light-gray rounded-full peer peer-focus:ring-2 peer-focus:ring-medis-primary dark:peer-focus:ring-medis-primary-dark peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-medis-primary"></div>
                     </label>
                 </div>
