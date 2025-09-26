@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medis - Blockchain Health Records</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              heading: ['Space Grotesk', 'sans-serif'],
+            },
+            colors: {
+              'medis-primary': '#007CF0', // Electric Blue
+              'medis-primary-dark': '#0059B3',
+              'medis-secondary': '#1A1A2E', // Dark Navy
+              'medis-secondary-dark': '#0A0A10', // Graphite Black
+              'medis-light': '#1F2937', 
+              'medis-dark': '#EAEAEA', // Soft White text
+              'medis-gray': '#8B8B9E',
+              'medis-light-gray': '#374151', // Lighter dark bg
+              'medis-accent': '#EA00D9', // Neon Magenta
+              
+              // Light theme additions
+              'medis-light-bg': '#F9FAFB', // very light gray
+              'medis-light-card': '#FFFFFF',
+              'medis-light-text': '#111827', // dark gray
+              'medis-light-muted': '#6B7280', // medium gray
+              'medis-light-border': '#E5E7EB',
+            },
+          },
+        },
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "chart.js": "https://aistudiocdn.com/chart.js@^4.4.3",
+    "react-chartjs-2": "https://aistudiocdn.com/react-chartjs-2@^5.2.0",
+    "three": "https://aistudiocdn.com/three@^0.166.1",
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^11.3.8",
+    "react-countup": "https://aistudiocdn.com/react-countup@^6.5.3"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-medis-light-bg dark:bg-medis-secondary-dark">
+    <script>
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.body.classList.add('dark');
+      } else {
+        document.body.classList.remove('dark');
+      }
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
