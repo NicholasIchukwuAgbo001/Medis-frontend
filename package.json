@@ -9,13 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
+    "@mysten/bcs": "^1.8.0",
+    "@noble/hashes": "^2.0.1",
+    "@scure/base": "^2.0.0",
     "chart.js": "^4.4.3",
-    "react-chartjs-2": "^5.2.0",
-    "three": "^0.166.1",
     "framer-motion": "^11.3.8",
-    "react-countup": "^6.5.3"
+    "react": "^19.1.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-countup": "^6.5.3",
+    "react-dom": "^19.1.1",
+    "three": "^0.166.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

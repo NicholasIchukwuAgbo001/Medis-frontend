@@ -8,9 +8,14 @@ import { motion } from "framer-motion";
 interface LoginScreenProps {
   onLogin: (user: User) => void;
   onClose: () => void;
+  onOpenZkLogin?: () => void;
 }
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onClose }) => {
+const LoginScreen: React.FC<LoginScreenProps> = ({
+  onLogin,
+  onClose,
+  onOpenZkLogin,
+}) => {
   const [selectedRole, setSelectedRole] = useState<UserRole>(UserRole.Admin);
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
   const [isLoading, setIsLoading] = useState(false);
@@ -83,6 +88,67 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onClose }) => {
           <RoleTab role={UserRole.Patient} label="Patient" />
         </div>
 
+        {selectedRole === UserRole.Patient && (
+          <div className="mb-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-medis-light-border dark:border-medis-light-gray"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-medis-light-card dark:bg-medis-secondary text-medis-light-muted dark:text-medis-gray">
+                  Patient Authentication Options
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-1 gap-3">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  // Set auth mode to login and show patient ID field
+                  setAuthMode("login");
+                }}
+                className="w-full flex items-center justify-center px-4 py-2 border border-medis-light-border dark:border-medis-light-gray rounded-md shadow-sm text-sm font-medium text-medis-light-text dark:text-medis-dark bg-white dark:bg-medis-secondary hover:bg-gray-50 dark:hover:bg-medis-light-gray/20 transition-colors"
+              >
+                <svg
+                  className="mr-2 h-5 w-5 text-medis-primary"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+                Traditional Login
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  // Close this modal and open the zkLogin modal
+                  onClose();
+                  // Trigger the zkLogin modal from the parent if the prop exists
+                  if (onOpenZkLogin) {
+                    onOpenZkLogin();
+                  }
+                }}
+                className="w-full flex items-center justify-center px-4 py-2 border border-medis-light-border dark:border-medis-light-gray rounded-md shadow-sm text-sm font-medium text-white bg-medis-primary hover:bg-medis-primary-dark transition-colors"
+              >
+                <svg
+                  className="mr-2 h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+                </svg>
+                Zero-Knowledge Login
+              </motion.button>
+            </div>
+          </div>
+        )}
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -94,20 +160,71 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onClose }) => {
               // LOGIN MODE
               <>
                 {selectedRole === UserRole.Patient ? (
-                  <div>
-                    <label
-                      htmlFor="medis-id"
-                      className="block text-sm font-medium text-medis-light-muted dark:text-medis-gray"
+                  // PATIENT AUTHENTICATION OPTIONS
+                  <div className="py-6">
+                    <h3 className="text-lg font-medium text-medis-light-text dark:text-medis-dark mb-4 text-center">
+                      Patient Authentication
+                    </h3>
+                    <p className="text-medis-light-muted dark:text-medis-gray text-center mb-6">
+                      Securely access your health portal with zero-knowledge
+                      authentication
+                    </p>
+
+                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+                      <div className="flex">
+                        <div className="flex-shrink-0">
+                          <svg
+                            className="h-5 w-5 text-blue-400"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <div className="ml-3 flex-1 md:flex md:justify-between">
+                          <p className="text-sm text-blue-700 dark:text-blue-300">
+                            Zero-knowledge authentication protects your privacy
+                            while verifying your identity
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => {
+                        // Close this modal and open the zkLogin modal
+                        onClose();
+                        // Trigger the zkLogin modal from the parent if the prop exists
+                        if (onOpenZkLogin) {
+                          onOpenZkLogin();
+                        }
+                      }}
+                      className="w-full flex items-center justify-center px-4 py-3 border border-medis-light-border dark:border-medis-light-gray rounded-md shadow-sm text-base font-medium text-white bg-medis-primary hover:bg-medis-primary-dark transition-colors"
                     >
-                      Medis Patient ID
-                    </label>
-                    <input
-                      type="text"
-                      id="medis-id"
-                      defaultValue="PAT001"
-                      required
-                      className={inputStyles}
-                    />
+                      <svg
+                        className="mr-2 h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+                      </svg>
+                      Login with Zero-Knowledge Authentication
+                    </motion.button>
+
+                    <div className="mt-6 text-center">
+                      <p className="text-xs text-medis-light-muted dark:text-medis-gray">
+                        By proceeding, you agree to our Privacy Policy and Terms
+                        of Service
+                      </p>
+                    </div>
                   </div>
                 ) : (
                   <div>
@@ -131,23 +248,55 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onClose }) => {
               // REGISTER MODE
               <>
                 {selectedRole === UserRole.Patient ? (
-                  <>
-                    <div>
-                      <label
-                        htmlFor="medis-id"
-                        className="block text-sm font-medium text-medis-light-muted dark:text-medis-gray"
+                  // PATIENT REGISTRATION NOT ALLOWED WITH MANUAL METHOD
+                  <div className="py-8 text-center">
+                    <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-medis-primary/10">
+                      <svg
+                        className="h-6 w-6 text-medis-primary"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
                       >
-                        Medis Patient ID
-                      </label>
-                      <input
-                        type="text"
-                        id="medis-id"
-                        placeholder="Will be assigned upon registration"
-                        readOnly
-                        className={`${inputStyles} cursor-not-allowed bg-gray-100 dark:bg-medis-secondary-dark/50`}
-                      />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        />
+                      </svg>
                     </div>
-                  </>
+                    <h3 className="mt-4 text-lg font-medium text-medis-light-text dark:text-medis-dark">
+                      Patient Registration
+                    </h3>
+                    <p className="mt-2 text-medis-light-muted dark:text-medis-gray">
+                      Patient registration is only available through
+                      zero-knowledge authentication.
+                    </p>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => {
+                        // Close this modal and open the zkLogin modal
+                        onClose();
+                        // Trigger the zkLogin modal from the parent if the prop exists
+                        if (onOpenZkLogin) {
+                          onOpenZkLogin();
+                        }
+                      }}
+                      className="mt-6 w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-medis-primary hover:bg-medis-primary-dark transition-colors"
+                    >
+                      <svg
+                        className="mr-2 h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+                      </svg>
+                      Register with Zero-Knowledge Authentication
+                    </motion.button>
+                  </div>
                 ) : (
                   // HOSPITAL ADMIN REGISTER FORM
                   <>
@@ -233,25 +382,28 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, onClose }) => {
               </>
             )}
 
-            {/* Common password fields */}
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-medis-light-muted dark:text-medis-gray"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                defaultValue={isLogin ? "password" : ""}
-                placeholder="••••••••"
-                required
-                className={inputStyles}
-              />
-            </div>
+            {/* Common password fields - only shown for non-patient roles */}
+            {selectedRole !== UserRole.Patient && (
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-medis-light-muted dark:text-medis-gray"
+                >
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  defaultValue={isLogin ? "password" : ""}
+                  placeholder="••••••••"
+                  required
+                  className={inputStyles}
+                />
+              </div>
+            )}
 
-            {!isLogin && (
+            {/* Confirm password field - only shown for non-patient roles during registration */}
+            {!isLogin && selectedRole !== UserRole.Patient && (
               <div>
                 <label
                   htmlFor="confirm-password"

@@ -15,9 +15,12 @@ import {
 } from "../components/icons/IconComponents";
 import LogoCloud from "../components/LogoCloud";
 import ThemeToggle from "../components/ThemeToggle";
+import DirectGoogleLoginButton from "../components/DirectGoogleLoginButton";
+import { ZkLoginProvider } from "../contexts/ZkLoginContext";
 
 interface LandingPageProps {
   onLoginClick: () => void;
+  onLogin: (user: any) => void;
 }
 
 // A component to display a single stat
@@ -54,8 +57,9 @@ const Stat = ({
   );
 };
 
-const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
+const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, onLogin }) => {
   const [scrolled, setScrolled] = useState(false);
+  const [isZkLoginModalOpen, setIsZkLoginModalOpen] = useState(false);
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -240,6 +244,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const openZkLoginModal = () => {
+    setIsZkLoginModalOpen(true);
+  };
+
+  const closeZkLoginModal = () => {
+    setIsZkLoginModalOpen(false);
+  };
+
   return (
     <div className="bg-medis-light-bg dark:bg-medis-secondary-dark text-medis-light-text dark:text-medis-dark">
       {/* Header */}
@@ -307,54 +319,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
             >
               <span className="relative z-10">Features</span>
-              <motion.span
-                className="absolute bottom-0 left-0 w-full h-0.5 bg-medis-primary rounded-full"
-                initial={{ scaleX: 0 }}
-                whileHover={{ scaleX: 1 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-              />
-              <motion.span
-                className="absolute inset-0 bg-medis-primary/10 rounded-md opacity-0"
-                whileHover={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              />
-            </motion.a>
-            <motion.a
-              href="#partners"
-              className={`text-sm font-medium transition-all duration-300 hover:text-medis-primary relative px-1 py-2 rounded-md ${
-                scrolled
-                  ? "text-medis-light-text dark:text-white"
-                  : "text-white"
-              }`}
-              whileHover={{ y: -3, scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            >
-              <span className="relative z-10">Partners</span>
-              <motion.span
-                className="absolute bottom-0 left-0 w-full h-0.5 bg-medis-primary rounded-full"
-                initial={{ scaleX: 0 }}
-                whileHover={{ scaleX: 1 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-              />
-              <motion.span
-                className="absolute inset-0 bg-medis-primary/10 rounded-md opacity-0"
-                whileHover={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-              />
-            </motion.a>
-            <motion.a
-              href="#about"
-              className={`text-sm font-medium transition-all duration-300 hover:text-medis-primary relative px-1 py-2 rounded-md ${
-                scrolled
-                  ? "text-medis-light-text dark:text-white"
-                  : "text-white"
-              }`}
-              whileHover={{ y: -3, scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            >
-              <span className="relative z-10">About</span>
               <motion.span
                 className="absolute bottom-0 left-0 w-full h-0.5 bg-medis-primary rounded-full"
                 initial={{ scaleX: 0 }}
@@ -527,44 +491,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
                   />
                 </motion.a>
                 <motion.a
-                  href="#partners"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-base font-medium text-medis-light-text dark:text-white hover:text-medis-primary transition-all duration-300 relative px-3 py-2 rounded-lg"
-                  whileHover={{
-                    x: 5,
-                    backgroundColor: "rgba(0, 124, 240, 0.1)",
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                >
-                  <span className="relative z-10">Partners</span>
-                  <motion.span
-                    className="absolute bottom-0 left-3 right-3 h-0.5 bg-medis-primary rounded-full"
-                    initial={{ scaleX: 0 }}
-                    whileHover={{ scaleX: 1 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                  />
-                </motion.a>
-                <motion.a
-                  href="#about"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-base font-medium text-medis-light-text dark:text-white hover:text-medis-primary transition-all duration-300 relative px-3 py-2 rounded-lg"
-                  whileHover={{
-                    x: 5,
-                    backgroundColor: "rgba(0, 124, 240, 0.1)",
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                >
-                  <span className="relative z-10">About</span>
-                  <motion.span
-                    className="absolute bottom-0 left-3 right-3 h-0.5 bg-medis-primary rounded-full"
-                    initial={{ scaleX: 0 }}
-                    whileHover={{ scaleX: 1 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                  />
-                </motion.a>
-                <motion.a
                   href="#security"
                   onClick={() => setMobileMenuOpen(false)}
                   className="block text-base font-medium text-medis-light-text dark:text-white hover:text-medis-primary transition-all duration-300 relative px-3 py-2 rounded-lg"
@@ -602,6 +528,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                   />
                 </motion.a>
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={onLoginClick}
+                  className="w-full rounded-md bg-medis-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-medis-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-medis-primary transition-colors duration-200"
+                >
+                  Access Portal
+                </motion.button>
               </div>
             </motion.div>
           )}
@@ -614,7 +548,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
           <div ref={mountRef} className="absolute inset-0 z-0 opacity-70" />
           <div className="relative mx-auto max-w-7xl px-6 py-32 z-10">
             <motion.div
-              className="max-w-4xl mx-auto text-center"
+              className="max-w-6xl mx-auto text-center"
               variants={heroContainerVariants}
               initial="hidden"
               animate="visible"
@@ -623,39 +557,81 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
                 variants={heroItemVariants}
                 className="text-4xl font-bold tracking-tight text-white sm:text-6xl font-heading"
               >
-                The Future of Health Records is Here.
+                <span className="block">Revolutionary Health Records</span>
+                <span className="block text-medis-primary mt-2">
+                  Powered by Blockchain
+                </span>
               </motion.h1>
               <motion.p
                 variants={heroItemVariants}
-                className="mt-6 text-lg leading-8 text-gray-300"
+                className="mt-6 text-lg leading-8 text-gray-300 max-w-3xl mx-auto"
               >
-                Secure, transparent, and patient-controlled medical records
-                powered by blockchain technology. Your health history, finally
-                in your hands.
+                Experience the future of healthcare with secure, transparent,
+                and patient-controlled medical records.
+                <span className="font-semibold text-white">
+                  Your health history, finally in your hands.
+                </span>
               </motion.p>
               <motion.div
                 variants={heroItemVariants}
                 className="mt-10 flex items-center justify-center gap-x-6"
               >
-                <motion.button
-                  whileHover={{
-                    scale: 1.05,
-                    y: -2,
-                    boxShadow: "0 0 15px rgba(0, 124, 240, 0.5)",
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={onLoginClick}
-                  className="rounded-md bg-medis-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-medis-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-medis-primary transition-colors duration-200"
-                >
-                  Access Your Portal
-                </motion.button>
+                <div className="relative">
+                  <ZkLoginProvider>
+                    <DirectGoogleLoginButton
+                      onLogin={onLogin}
+                      onClose={() => setIsZkLoginModalOpen(false)}
+                    />
+                  </ZkLoginProvider>
+                </div>
                 <motion.a
-                  whileHover={{ x: 5 }}
+                  whileHover={{
+                    x: 5,
+                    color: "#007CF0",
+                    textDecoration: "underline",
+                  }}
                   href="#features"
-                  className="text-sm font-semibold leading-6 text-white"
+                  className="text-base font-semibold leading-6 text-white transition-all duration-300"
                 >
                   Learn more <span aria-hidden="true">→</span>
                 </motion.a>
+              </motion.div>
+
+              {/* Google-style badges */}
+              <motion.div
+                variants={heroItemVariants}
+                className="mt-8 flex flex-wrap justify-center gap-4"
+              >
+                <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white border border-white/20">
+                  <svg
+                    className="mr-1.5 h-2.5 w-2.5 text-green-400"
+                    fill="currentColor"
+                    viewBox="0 0 8 8"
+                  >
+                    <circle cx="4" cy="4" r="3" />
+                  </svg>
+                  100% Secure
+                </div>
+                <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white border border-white/20">
+                  <svg
+                    className="mr-1.5 h-2.5 w-2.5 text-blue-400"
+                    fill="currentColor"
+                    viewBox="0 0 8 8"
+                  >
+                    <circle cx="4" cy="4" r="3" />
+                  </svg>
+                  HIPAA Compliant
+                </div>
+                <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white border border-white/20">
+                  <svg
+                    className="mr-1.5 h-2.5 w-2.5 text-purple-400"
+                    fill="currentColor"
+                    viewBox="0 0 8 8"
+                  >
+                    <circle cx="4" cy="4" r="3" />
+                  </svg>
+                  Zero-Knowledge
+                </div>
               </motion.div>
 
               <motion.div
@@ -663,64 +639,110 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
                 className="mt-16 border-t border-white/10 pt-10"
               >
                 <div className="grid grid-cols-2 gap-y-10 sm:grid-cols-4 sm:gap-x-8 text-center">
-                  <Stat
-                    end={1.2}
-                    decimals={1}
-                    suffix="M+"
-                    label="Records Secured"
-                  />
-                  <Stat end={4} suffix="k+" label="Trusted Providers" />
-                  <Stat end={100} suffix="%" label="Patient Owned Data" />
-                  <Stat
-                    end={99.9}
-                    decimals={1}
-                    suffix="%"
-                    label="Guaranteed Uptime"
-                  />
+                  <div className="flex flex-col items-center">
+                    <div className="text-3xl font-bold font-heading text-white sm:text-4xl">
+                      <CountUp
+                        end={1.2}
+                        duration={2.5}
+                        decimals={1}
+                        enableScrollSpy
+                        scrollSpyDelay={200}
+                      />
+                      M+
+                    </div>
+                    <p className="mt-1 text-sm leading-6 text-gray-300 dark:text-medis-gray">
+                      Records Secured
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="text-3xl font-bold font-heading text-white sm:text-4xl">
+                      <CountUp
+                        end={4}
+                        duration={2.5}
+                        decimals={0}
+                        enableScrollSpy
+                        scrollSpyDelay={200}
+                        suffix="k+"
+                      />
+                    </div>
+                    <p className="mt-1 text-sm leading-6 text-gray-300 dark:text-medis-gray">
+                      Trusted Providers
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="text-3xl font-bold font-heading text-white sm:text-4xl">
+                      <CountUp
+                        end={100}
+                        duration={2.5}
+                        decimals={0}
+                        enableScrollSpy
+                        scrollSpyDelay={200}
+                        suffix="%"
+                      />
+                    </div>
+                    <p className="mt-1 text-sm leading-6 text-gray-300 dark:text-medis-gray">
+                      Patient Owned Data
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="text-3xl font-bold font-heading text-white sm:text-4xl">
+                      <CountUp
+                        end={99.9}
+                        duration={2.5}
+                        decimals={1}
+                        enableScrollSpy
+                        scrollSpyDelay={200}
+                        suffix="%"
+                      />
+                    </div>
+                    <p className="mt-1 text-sm leading-6 text-gray-300 dark:text-medis-gray">
+                      Guaranteed Uptime
+                    </p>
+                  </div>
                 </div>
 
                 <div className="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-3 text-left">
                   <motion.div
                     whileHover={{ y: -5, scale: 1.03 }}
-                    className="flex flex-col items-start"
+                    className="flex flex-col items-start bg-white/5 p-6 rounded-xl ring-1 ring-white/10 transition-all duration-300 hover:ring-medis-primary/50 hover:bg-white/10"
                   >
-                    <div className="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
-                      <BlockchainIcon className="h-6 w-6 text-white" />
+                    <div className="rounded-lg bg-medis-primary/10 p-3 ring-1 ring-medis-primary/20">
+                      <BlockchainIcon className="h-6 w-6 text-medis-primary" />
                     </div>
-                    <h3 className="mt-4 font-semibold text-white">
+                    <h3 className="mt-4 text-lg font-semibold text-white">
                       Immutable Security
                     </h3>
-                    <p className="mt-1 leading-7 text-gray-400">
+                    <p className="mt-2 leading-6 text-gray-300">
                       Records are cryptographically sealed, making them
                       tamper-proof.
                     </p>
                   </motion.div>
                   <motion.div
                     whileHover={{ y: -5, scale: 1.03 }}
-                    className="flex flex-col items-start"
+                    className="flex flex-col items-start bg-white/5 p-6 rounded-xl ring-1 ring-white/10 transition-all duration-300 hover:ring-medis-primary/50 hover:bg-white/10"
                   >
-                    <div className="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
-                      <UserShieldIcon className="h-6 w-6 text-white" />
+                    <div className="rounded-lg bg-medis-primary/10 p-3 ring-1 ring-medis-primary/20">
+                      <UserShieldIcon className="h-6 w-6 text-medis-primary" />
                     </div>
-                    <h3 className="mt-4 font-semibold text-white">
+                    <h3 className="mt-4 text-lg font-semibold text-white">
                       Total Data Ownership
                     </h3>
-                    <p className="mt-1 leading-7 text-gray-400">
+                    <p className="mt-2 leading-6 text-gray-300">
                       You control who sees your data with explicit, verifiable
                       permissions.
                     </p>
                   </motion.div>
                   <motion.div
                     whileHover={{ y: -5, scale: 1.03 }}
-                    className="flex flex-col items-start"
+                    className="flex flex-col items-start bg-white/5 p-6 rounded-xl ring-1 ring-white/10 transition-all duration-300 hover:ring-medis-primary/50 hover:bg-white/10"
                   >
-                    <div className="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
-                      <HeartbeatIcon className="h-6 w-6 text-white" />
+                    <div className="rounded-lg bg-medis-primary/10 p-3 ring-1 ring-medis-primary/20">
+                      <HeartbeatIcon className="h-6 w-6 text-medis-primary" />
                     </div>
-                    <h3 className="mt-4 font-semibold text-white">
+                    <h3 className="mt-4 text-lg font-semibold text-white">
                       Instant Emergency Access
                     </h3>
-                    <p className="mt-1 leading-7 text-gray-400">
+                    <p className="mt-2 leading-6 text-gray-300">
                       Critical info is available to responders via your secure
                       Emergency ID.
                     </p>
@@ -822,109 +844,10 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
                   <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-medis-primary">
                     <HeartbeatIcon className="h-6 w-6 text-white" />
                   </div>
-                  Emergency Ready
+                  Multi-Signature Auth
                 </div>
                 <div className="mt-2 text-base leading-7 text-medis-light-muted dark:text-medis-gray">
-                  Your critical information (blood type, allergies) is available
-                  instantly via your Emergency NFT for first responders.
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Partnership Section */}
-      <section
-        id="partners"
-        className="bg-white dark:bg-medis-secondary-dark py-24 sm:py-32"
-      >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <motion.div
-            className="mx-auto max-w-2xl lg:text-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl font-bold tracking-tight text-medis-light-text dark:text-medis-dark sm:text-4xl font-heading">
-              Our Growing Partnership Ecosystem
-            </h2>
-            <p className="mt-6 text-lg leading-8 text-medis-light-muted dark:text-medis-gray">
-              We collaborate with pioneers in healthcare and technology to build
-              a truly decentralized and interoperable health data network.
-            </p>
-          </motion.div>
-          <LogoCloud />
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section
-        id="about"
-        className="bg-gray-50 dark:bg-medis-secondary py-24 sm:py-32"
-      >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <motion.div
-            className="mx-auto max-w-2xl lg:text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-base font-semibold leading-7 text-medis-primary font-heading">
-              About Medis
-            </h2>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-medis-light-text dark:text-medis-dark sm:text-4xl font-heading">
-              Revolutionizing Healthcare Through Blockchain
-            </p>
-            <p className="mt-6 text-lg leading-8 text-medis-light-muted dark:text-medis-gray">
-              Founded by healthcare professionals and blockchain experts, Medis
-              is on a mission to give patients complete control over their
-              medical data while ensuring the highest levels of security and
-              privacy.
-            </p>
-          </motion.div>
-
-          <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
-            <div className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-              <motion.div
-                className="relative pl-16"
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="text-base font-semibold leading-7 text-medis-light-text dark:text-medis-dark">
-                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-medis-primary">
-                    <UserShieldIcon className="h-6 w-6 text-white" />
-                  </div>
-                  Patient-First Approach
-                </div>
-                <div className="mt-2 text-base leading-7 text-medis-light-muted dark:text-medis-gray">
-                  Every decision we make prioritizes patient autonomy and data
-                  ownership, ensuring you remain in complete control of your
-                  health information.
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="relative pl-16"
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="text-base font-semibold leading-7 text-medis-light-text dark:text-medis-dark">
-                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-medis-primary">
-                    <BlockchainIcon className="h-6 w-6 text-white" />
-                  </div>
-                  Innovation & Trust
-                </div>
-                <div className="mt-2 text-base leading-7 text-medis-light-muted dark:text-medis-gray">
-                  We combine cutting-edge blockchain technology with healthcare
-                  expertise to create solutions that are both innovative and
-                  trustworthy.
+                  Multiple authorization layers prevent unauthorized access
                 </div>
               </motion.div>
             </div>
@@ -933,85 +856,83 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
       </section>
 
       {/* Security Section */}
-      <section
-        id="security"
-        className="bg-gradient-to-br from-medis-secondary-dark to-gray-900 py-24 sm:py-32"
-      >
+      <section id="security" className="bg-medis-secondary-dark py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <motion.div
-            className="mx-auto max-w-2xl lg:text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8 }}
-          >
+          <div className="mx-auto max-w-2xl lg:text-center">
             <h2 className="text-base font-semibold leading-7 text-medis-primary font-heading">
-              🔒 Military-Grade Security
+              Military-Grade Security
             </h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl font-heading">
-              Your Data is Protected by Advanced Cryptography
+              Your Health Data is Fort Knox
             </p>
             <p className="mt-6 text-lg leading-8 text-gray-300">
-              We employ state-of-the-art security measures to ensure your
-              medical records remain private, secure, and tamper-proof at all
-              times.
+              Medis implements multiple layers of security to ensure your
+              sensitive health information is always protected.
             </p>
-          </motion.div>
-
-          <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
-            <div className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-3 lg:gap-y-16">
+          </div>
+          <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+            <div className="grid max-w-xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-3">
               <motion.div
-                className="text-center"
+                className="flex flex-col rounded-2xl bg-white/5 p-8 ring-1 ring-white/10"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
+                viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
+                whileHover={{ y: -5 }}
               >
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-medis-primary/10 border border-medis-primary/20">
-                  <BlockchainIcon className="h-8 w-8 text-medis-primary" />
+                <div className="flex items-center">
+                  <div className="rounded-md bg-medis-primary/10 p-2 ring-1 ring-medis-primary/20">
+                    <BlockchainIcon className="h-6 w-6 text-medis-primary" />
+                  </div>
+                  <h3 className="ml-4 text-lg font-semibold leading-7 text-white">
+                    Immutable Ledger
+                  </h3>
                 </div>
-                <h3 className="mt-6 text-lg font-semibold text-white">
-                  256-bit Encryption
-                </h3>
-                <p className="mt-2 text-sm text-gray-400">
-                  Industry-standard encryption protects data at rest and in
-                  transit
+                <p className="mt-4 flex-auto text-base leading-7 text-gray-300">
+                  Every record is cryptographically sealed on an immutable
+                  blockchain, making it tamper-proof and auditable.
                 </p>
               </motion.div>
-
               <motion.div
-                className="text-center"
+                className="flex flex-col rounded-2xl bg-white/5 p-8 ring-1 ring-white/10"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
+                viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
+                whileHover={{ y: -5 }}
               >
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-medis-primary/10 border border-medis-primary/20">
-                  <UserShieldIcon className="h-8 w-8 text-medis-primary" />
+                <div className="flex items-center">
+                  <div className="rounded-md bg-medis-primary/10 p-2 ring-1 ring-medis-primary/20">
+                    <UserShieldIcon className="h-6 w-6 text-medis-primary" />
+                  </div>
+                  <h3 className="ml-4 text-lg font-semibold leading-7 text-white">
+                    Zero-Knowledge Auth
+                  </h3>
                 </div>
-                <h3 className="mt-6 text-lg font-semibold text-white">
-                  Zero-Knowledge Proofs
-                </h3>
-                <p className="mt-2 text-sm text-gray-400">
-                  Verify data integrity without exposing sensitive information
+                <p className="mt-4 flex-auto text-base leading-7 text-gray-300">
+                  Prove your identity without revealing sensitive information.
+                  Your data stays private while ensuring secure access.
                 </p>
               </motion.div>
-
               <motion.div
-                className="text-center"
+                className="flex flex-col rounded-2xl bg-white/5 p-8 ring-1 ring-white/10"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
+                viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
+                whileHover={{ y: -5 }}
               >
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-medis-primary/10 border border-medis-primary/20">
-                  <HeartbeatIcon className="h-8 w-8 text-medis-primary" />
+                <div className="flex items-center">
+                  <div className="rounded-md bg-medis-primary/10 p-2 ring-1 ring-medis-primary/20">
+                    <HeartbeatIcon className="h-6 w-6 text-medis-primary" />
+                  </div>
+                  <h3 className="ml-4 text-lg font-semibold leading-7 text-white">
+                    Emergency Ready
+                  </h3>
                 </div>
-                <h3 className="mt-6 text-lg font-semibold text-white">
-                  Multi-Signature Auth
-                </h3>
-                <p className="mt-2 text-sm text-gray-400">
-                  Multiple authorization layers prevent unauthorized access
+                <p className="mt-4 flex-auto text-base leading-7 text-gray-300">
+                  Critical information is available via your Emergency NFT for
+                  first responders while keeping the rest of your data private.
                 </p>
               </motion.div>
             </div>
@@ -1066,24 +987,24 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                     />
                   </svg>
                 </div>
                 <h3 className="mt-6 text-xl font-semibold text-medis-light-text dark:text-medis-dark">
-                  Email Us
+                  Contact Sales
                 </h3>
                 <p className="mt-2 text-medis-light-muted dark:text-medis-gray">
-                  Get in touch with our team
+                  Speak with our healthcare solutions team
                 </p>
-                <a
-                  href="mailto:contact@medis.health"
-                  className="mt-4 text-medis-primary hover:text-medis-primary-dark font-medium transition-colors"
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="mt-4 px-6 py-2 bg-medis-primary text-white rounded-lg hover:bg-medis-primary-dark transition-colors font-medium"
                 >
-                  contact@medis.health
-                </a>
+                  Call Now
+                </motion.button>
               </motion.div>
-
               <motion.div
                 className="flex flex-col items-center text-center p-8 bg-medis-light-bg dark:bg-medis-secondary rounded-2xl"
                 initial={{ opacity: 0, y: 30 }}
@@ -1118,7 +1039,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
                   whileTap={{ scale: 0.95 }}
                   className="mt-4 px-6 py-2 bg-medis-primary text-white rounded-lg hover:bg-medis-primary-dark transition-colors font-medium"
                 >
-                  Start Chat
+                  Start
                 </motion.button>
               </motion.div>
             </div>
@@ -1127,87 +1048,24 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-100 dark:bg-medis-secondary">
-        <div className="mx-auto max-w-7xl overflow-hidden px-6 py-12 sm:py-16 lg:px-8">
-          <div className="text-center">
-            <a
-              href="#"
-              className="-m-1.5 p-1.5 flex items-center justify-center"
-            >
-              <LogoIcon className="h-8 w-auto text-medis-primary" />
-              <span className="ml-2 text-2xl font-bold font-heading text-medis-light-text dark:text-white">
-                Medis
-              </span>
+      <footer className="bg-medis-secondary-dark border-t border-white/10">
+        <div className="mx-auto max-w-7xl overflow-hidden px-6 py-12 lg:px-8">
+          <div className="mt-10 flex justify-center space-x-10">
+            <a href="#" className="text-gray-400 hover:text-gray-300">
+              <span className="sr-only">Twitter</span>
+              <TwitterIcon className="h-6 w-6" />
             </a>
-            <p className="mt-4 text-sm leading-6 text-medis-light-muted dark:text-medis-gray">
-              Securing the future of health records, one block at a time.
-            </p>
+            <a href="#" className="text-gray-400 hover:text-gray-300">
+              <span className="sr-only">GitHub</span>
+              <GithubIcon className="h-6 w-6" />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-gray-300">
+              <span className="sr-only">LinkedIn</span>
+              <LinkedInIcon className="h-6 w-6" />
+            </a>
           </div>
-          <nav
-            className="mt-10 mb-10 flex flex-wrap justify-center gap-x-6 gap-y-2"
-            aria-label="Footer"
-          >
-            <a
-              href="#"
-              className="text-sm leading-6 text-medis-light-muted dark:text-medis-gray hover:text-medis-light-text dark:hover:text-white transition-colors"
-            >
-              About
-            </a>
-            <a
-              href="#features"
-              className="text-sm leading-6 text-medis-light-muted dark:text-medis-gray hover:text-medis-light-text dark:hover:text-white transition-colors"
-            >
-              Features
-            </a>
-            <a
-              href="#"
-              className="text-sm leading-6 text-medis-light-muted dark:text-medis-gray hover:text-medis-light-text dark:hover:text-white transition-colors"
-            >
-              Careers
-            </a>
-            <a
-              href="#"
-              className="text-sm leading-6 text-medis-light-muted dark:text-medis-gray hover:text-medis-light-text dark:hover:text-white transition-colors"
-            >
-              Contact
-            </a>
-            <a
-              href="#"
-              className="text-sm leading-6 text-medis-light-muted dark:text-medis-gray hover:text-medis-light-text dark:hover:text-white transition-colors"
-            >
-              Privacy Policy
-            </a>
-          </nav>
-          <div className="mt-10 pt-8 border-t border-medis-light-border dark:border-medis-light-gray/20 flex flex-col-reverse items-center gap-y-6 sm:flex-row sm:justify-between">
-            <p className="text-xs leading-5 text-medis-light-muted dark:text-medis-gray">
-              &copy; {new Date().getFullYear()} Medis, Inc. All rights reserved.
-            </p>
-            <div className="flex justify-center space-x-6">
-              <motion.a
-                whileHover={{ scale: 1.2, y: -2 }}
-                href="#"
-                className="text-medis-light-muted dark:text-medis-gray hover:text-medis-light-text dark:hover:text-white transition-colors"
-              >
-                <span className="sr-only">Twitter</span>
-                <TwitterIcon className="h-6 w-6" />
-              </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.2, y: -2 }}
-                href="#"
-                className="text-medis-light-muted dark:text-medis-gray hover:text-medis-light-text dark:hover:text-white transition-colors"
-              >
-                <span className="sr-only">GitHub</span>
-                <GithubIcon className="h-6 w-6" />
-              </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.2, y: -2 }}
-                href="#"
-                className="text-medis-light-muted dark:text-medis-gray hover:text-medis-light-text dark:hover:text-white transition-colors"
-              >
-                <span className="sr-only">LinkedIn</span>
-                <LinkedInIcon className="h-6 w-6" />
-              </motion.a>
-            </div>
+          <div className="mt-10 text-center text-xs leading-5 text-gray-400">
+            <p>&copy; 2023 Medis. All rights reserved.</p>
           </div>
         </div>
       </footer>
