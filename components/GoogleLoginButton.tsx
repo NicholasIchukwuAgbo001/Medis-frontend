@@ -1,27 +1,31 @@
 // components/GoogleLoginButton.tsx
-import React from "react";
-import { useZkLogin } from "../hooks/useZkLogin";
+import React, { useState } from "react";
 
 interface GoogleLoginButtonProps {
-  onLoginSuccess?: (zkLoginData: any) => void;
+  onLoginSuccess?: (loginData: any) => void;
 }
 
 const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
   onLoginSuccess,
 }) => {
-  const { startZkLogin, isLoading } = useZkLogin();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
-    // In a real implementation, this would trigger the Google OAuth flow
-    // For now, we'll use our mock implementation which automatically starts the zkLogin process
-    await startZkLogin();
+    setIsLoading(true);
 
-    // If there's an onLoginSuccess callback, we would call it with the zkLogin data
-    // For now, we're just demonstrating the flow
-    // In a real implementation, this would redirect to the patient dashboard
-    if (onLoginSuccess) {
-      // This would be called with actual zkLogin data in a real implementation
-      onLoginSuccess({ status: "success" });
+    // Simulate Google OAuth flow
+    try {
+      // Simulate API call
+      setTimeout(() => {
+        // In a real implementation, this would redirect to the patient dashboard
+        if (onLoginSuccess) {
+          onLoginSuccess({ status: "success" });
+        }
+        setIsLoading(false);
+      }, 1000);
+    } catch (error) {
+      console.error("Google login error:", error);
+      setIsLoading(false);
     }
   };
 
@@ -53,7 +57,7 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
           </svg>
-          Authenticating...
+          Signing in...
         </>
       ) : (
         <>

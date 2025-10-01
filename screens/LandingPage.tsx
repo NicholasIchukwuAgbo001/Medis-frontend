@@ -15,8 +15,6 @@ import {
 } from "../components/icons/IconComponents";
 import LogoCloud from "../components/LogoCloud";
 import ThemeToggle from "../components/ThemeToggle";
-import DirectGoogleLoginButton from "../components/DirectGoogleLoginButton";
-import { ZkLoginProvider } from "../contexts/ZkLoginContext";
 
 interface LandingPageProps {
   onLoginClick: () => void;
@@ -59,7 +57,6 @@ const Stat = ({
 
 const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, onLogin }) => {
   const [scrolled, setScrolled] = useState(false);
-  const [isZkLoginModalOpen, setIsZkLoginModalOpen] = useState(false);
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -243,14 +240,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, onLogin }) => {
   };
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const openZkLoginModal = () => {
-    setIsZkLoginModalOpen(true);
-  };
-
-  const closeZkLoginModal = () => {
-    setIsZkLoginModalOpen(false);
-  };
 
   return (
     <div className="bg-medis-light-bg dark:bg-medis-secondary-dark text-medis-light-text dark:text-medis-dark">
@@ -577,12 +566,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, onLogin }) => {
                 className="mt-10 flex items-center justify-center gap-x-6"
               >
                 <div className="relative">
-                  <ZkLoginProvider>
-                    <DirectGoogleLoginButton
-                      onLogin={onLogin}
-                      onClose={() => setIsZkLoginModalOpen(false)}
-                    />
-                  </ZkLoginProvider>
+                  <button
+                    onClick={onLoginClick}
+                    className="flex items-center justify-center w-full px-4 py-3 text-base font-medium text-white bg-blue-600 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                  >
+                    Access Portal
+                  </button>
                 </div>
                 <motion.a
                   whileHover={{

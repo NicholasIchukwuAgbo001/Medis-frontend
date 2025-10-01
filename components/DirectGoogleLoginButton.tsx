@@ -1,7 +1,5 @@
 // components/DirectGoogleLoginButton.tsx
-import React, { useEffect } from "react";
-import { useZkLogin } from "../hooks/useZkLogin";
-import { decodeJWT } from "../utils/zkLoginUtils";
+import React, { useState } from "react";
 
 interface DirectGoogleLoginButtonProps {
   onLogin: (user: any) => void;
@@ -12,7 +10,7 @@ const DirectGoogleLoginButton: React.FC<DirectGoogleLoginButtonProps> = ({
   onLogin,
   onClose,
 }) => {
-  const { startZkLogin, isLoading, jwt } = useZkLogin();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
     // Close the current modal if there is one
@@ -20,28 +18,12 @@ const DirectGoogleLoginButton: React.FC<DirectGoogleLoginButtonProps> = ({
       onClose();
     }
 
-    // Start the zkLogin process
-    await startZkLogin();
-  };
+    setIsLoading(true);
 
-  // Effect to handle login after JWT is received
-  useEffect(() => {
-    if (jwt && onLogin) {
-      // Decode the JWT to get user information
-      try {
-        const userData = decodeJWT(jwt);
-
-        // Use the actual Google email from the JWT
-        onLogin({
-          id: "PAT-" + userData.sub, // Use Google user ID as patient ID
-          name: userData.name || userData.email.split("@")[0],
-          email: userData.email,
-          role: "Patient",
-          avatarUrl: userData.picture || "https://example.com/profile.jpg",
-        });
-      } catch (error) {
-        console.error("Error decoding JWT:", error);
-        // Fallback to mock data if JWT decoding fails
+    // Simulate Google OAuth flow
+    try {
+      // Simulate API call
+      setTimeout(() => {
         onLogin({
           id: "PAT001",
           name: "John Doe",
@@ -49,9 +31,13 @@ const DirectGoogleLoginButton: React.FC<DirectGoogleLoginButtonProps> = ({
           role: "Patient",
           avatarUrl: "https://example.com/profile.jpg",
         });
-      }
+        setIsLoading(false);
+      }, 1000);
+    } catch (error) {
+      console.error("Google login error:", error);
+      setIsLoading(false);
     }
-  }, [jwt, onLogin]);
+  };
 
   return (
     <button
@@ -81,7 +67,7 @@ const DirectGoogleLoginButton: React.FC<DirectGoogleLoginButtonProps> = ({
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
           </svg>
-          Authenticating...
+          Signing in...
         </>
       ) : (
         <>

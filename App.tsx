@@ -7,18 +7,14 @@ import PatientDashboard from "./screens/patient/PatientDashboard";
 import LandingPage from "./screens/LandingPage";
 import { UserRole } from "./types";
 import Modal from "./components/Modal";
-import ZkLoginPatientAuth from "./components/ZkLoginPatientAuth";
-import { ZkLoginProvider } from "./contexts/ZkLoginContext";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isZkLoginModalOpen, setIsZkLoginModalOpen] = useState(false);
 
   const handleLogin = (user: User) => {
     setCurrentUser(user);
     setIsLoginModalOpen(false);
-    setIsZkLoginModalOpen(false);
   };
 
   const handleLogout = () => {
@@ -31,14 +27,6 @@ const App: React.FC = () => {
 
   const closeLoginModal = () => {
     setIsLoginModalOpen(false);
-  };
-
-  const openZkLoginModal = () => {
-    setIsZkLoginModalOpen(true);
-  };
-
-  const closeZkLoginModal = () => {
-    setIsZkLoginModalOpen(false);
   };
 
   const renderContent = () => {
@@ -61,16 +49,7 @@ const App: React.FC = () => {
       <>
         <LandingPage onLoginClick={openLoginModal} onLogin={handleLogin} />
         <Modal isOpen={isLoginModalOpen} onClose={closeLoginModal}>
-          <LoginScreen
-            onLogin={handleLogin}
-            onClose={closeLoginModal}
-            onOpenZkLogin={openZkLoginModal}
-          />
-        </Modal>
-        <Modal isOpen={isZkLoginModalOpen} onClose={closeZkLoginModal}>
-          <ZkLoginProvider>
-            <ZkLoginPatientAuth onLogin={handleLogin} />
-          </ZkLoginProvider>
+          <LoginScreen onLogin={handleLogin} onClose={closeLoginModal} />
         </Modal>
       </>
     );
